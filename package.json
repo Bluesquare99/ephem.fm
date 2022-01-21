@@ -1,0 +1,23 @@
+{
+  "name": "ephem",
+  "version": "1.0.0",
+  "description": "for stream radio",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bluesquare99/ephem.fm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bluesquare99/ephem.fm/issues"
+  },
+  "homepage": "https://github.com/Bluesquare99/ephem.fm#readme",
+  "devDependencies": {
+    "parcel": "^2.2.1"
+  }
+}
