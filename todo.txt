@@ -1,11 +1,6 @@
-1. Find a way to hide the API Key through putting into a gitignore file
-2. Try calling different stations and retrieving weather objects
-3. Break out the weather objects into all of the variables that you want
-  a. Sun
-  b. Wind
-  c. Maybe others?
-4. Create a function that will check every so often and compare whether the new weather data has changed from the old weather data
-5. Ask how best to implement an observer function like this
-6. Check out the Spotify API --> how can I look up popularity of songs or artists?
-7. How can I find out the info from different songs?
+1. Create a function that will check every so often and compare whether the new weather data has changed from the old weather data
+  - This should begin happening whenever it's updated
+2. Ask how best to implement an observer function like this
+3. Check out the Spotify API --> how can I look up popularity of songs or artists?
+4. How can I find out the info from different songs?
 

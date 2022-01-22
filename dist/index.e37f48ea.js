@@ -519,17 +519,20 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"aenu9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
+var _weatherViewJs = require("./views/weatherView.js");
+var _weatherViewJsDefault = parcelHelpers.interopDefault(_weatherViewJs);
 const controlWeather = async function(station) {
     // Retrieves weather data from model
-    const wind = await _modelJs.retrieveWeather(station);
-    // Need to give weather data to controller
-    console.log("🌬", wind);
+    const weather = await _modelJs.retrieveWeather(station);
+    // Renders weather
+    _weatherViewJsDefault.default.render(_modelJs.stations[station], weather);
 };
-controlWeather("kutx");
-console.log(_modelJs.state.weather);
+controlWeather("fbi");
+_modelJs.updateWeather("fbi");
 
-},{"./model.js":"Y4A21"}],"Y4A21":[function(require,module,exports) {
+},{"./model.js":"Y4A21","./views/weatherView.js":"jcuJR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state
@@ -538,14 +541,13 @@ parcelHelpers.export(exports, "stations", ()=>stations
 );
 parcelHelpers.export(exports, "retrieveWeather", ()=>retrieveWeather
 );
-parcelHelpers.export(exports, "updateWind", ()=>updateWind
+parcelHelpers.export(exports, "updateWeather", ()=>updateWeather
+);
+parcelHelpers.export(exports, "updateWeatherData", ()=>updateWeatherData
 );
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const state = {
-    station: "",
-    weather: {
-    }
 };
 const stations = {
     fbi: {
@@ -563,36 +565,48 @@ const stations = {
             30.1721,
             -97.4402
         ]
+    },
+    cism: {
+        name: "cism",
+        city: "Montreal, Quebec, Canada",
+        coordinates: [
+            45.3023,
+            -73.3644
+        ]
     }
 };
 const retrieveWeather = async function(station) {
     try {
-        console.log(stations[station]);
         const [lat, lng] = stations[station].coordinates;
         const url = `${_configJs.API_WEATHER_URL}lat=${lat}&lon=${lng}&appid=${_configJs.API_WEATHER_KEY}&units=imperial`;
         const data = await fetch(url);
-        const { wind  } = await data.json();
+        const weather = await data.json();
+        state.station = station;
+        state.weather = weather;
         // add an updateState method
-        const { speed , deg , gust  } = wind;
-        state.weather.wind = {
-            speed,
-            deg,
-            gust
-        };
-        return wind;
+        // const { speed, deg, gust } = wind;
+        // state.weather.wind = { speed, deg, gust };
+        return weather;
     } catch (err) {
         console.error(err);
     }
 };
-const updateWind = async function(station) {
+const updateWeather = function(station) {
+    setInterval(updateWeatherData(state, station), 1 * _configJs.MINUTES);
+};
+const updateWeatherData = async function(state1, station) {
     try {
-        const prev = state.weather.wind;
-        const { speed , deg , gust  } = await retrieveWeather(station);
-        // Update all at once
-        if (prev.speed !== speed) state.weather.wind.speed = speed;
-        if (prev.deg !== deg) state.weather.wind.deg = deg;
-        if (prev.gust !== gust) state.weather.wind.gust = gust;
-        console.log("Wind data updated!");
+        const prev = state1;
+        const cur = await retrieveWeather(station);
+        console.log("prev", prev.weather);
+        console.log("cur", cur);
+        if (prev != cur) console.log(`Something's fishy!`);
+        else console.log("All good here");
+    // // Update all at once
+    // if (prev.speed !== speed) state.weather.wind.speed = speed;
+    // if (prev.deg !== deg) state.weather.wind.deg = deg;
+    // if (prev.gust !== gust) state.weather.wind.gust = gust;
+    // console.log("Wind data updated!");
     } catch (err) {
         console.error("Trouble updating error!");
     }
@@ -605,8 +619,11 @@ parcelHelpers.export(exports, "API_WEATHER_URL", ()=>API_WEATHER_URL
 );
 parcelHelpers.export(exports, "API_WEATHER_KEY", ()=>API_WEATHER_KEY
 );
+parcelHelpers.export(exports, "MINUTES", ()=>MINUTES
+);
 const API_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?";
 const API_WEATHER_KEY = "effae31f7bfb25c7219c16a6f16eab0f";
+const MINUTES = 60000;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -652,6 +669,43 @@ const AJAX = async function(url) {
         console.error(err);
     }
 };
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jcuJR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class WeatherView extends _viewJsDefault.default {
+    _parentEl = document.querySelector(".weather-display");
+    _generateMarkup() {
+        const description = `In ${this._station.city}, the temperature is ${this._weather.main.temp} Fahrenheit.  There are ${this._weather.weather[0].description}.  The wind's blowing at ${this._weather.wind.speed} at direction of ${this._weather.wind.deg} degrees.`;
+        const weatherIcon = `http://openweathermap.org/img/wn/03n@2x.png`;
+        return `
+      <img src="${weatherIcon}" />
+      <p>${description}</p>
+    `;
+    }
+}
+exports.default = new WeatherView();
+
+},{"./View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5cUXS":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class View {
+    _data;
+    render(station, weather, render = true) {
+        this._station = station;
+        this._weather = weather;
+        const markup = this._generateMarkup();
+        if (!render) return markup;
+        this._clear();
+        this._parentEl.insertAdjacentHTML("afterbegin", markup);
+    }
+    _clear() {
+        this._parentEl.innerHTML = "";
+    }
+}
+exports.default = View;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire5eb1")
 

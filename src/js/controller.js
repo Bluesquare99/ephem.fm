@@ -1,12 +1,13 @@
 import * as model from "./model.js";
+import weatherView from "./views/weatherView.js";
 
 const controlWeather = async function (station) {
   // Retrieves weather data from model
-  const wind = await model.retrieveWeather(station);
+  const weather = await model.retrieveWeather(station);
 
-  // Need to give weather data to controller
-  console.log("🌬", wind);
+  // Renders weather
+  weatherView.render(model.stations[station], weather);
 };
 
-controlWeather("kutx");
-console.log(model.state.weather);
+controlWeather("fbi");
+model.updateWeather("fbi");
