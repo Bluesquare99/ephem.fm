@@ -19,5 +19,8 @@
   "homepage": "https://github.com/Bluesquare99/ephem.fm#readme",
   "devDependencies": {
     "parcel": "^2.2.1"
+  },
+  "dependencies": {
+    "set-interval-async": "^2.0.3"
   }
 }
