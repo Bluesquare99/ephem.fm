@@ -521,29 +521,46 @@ function hmrAcceptRun(bundle, id) {
 },{}],"aenu9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
+var _configJs = require("./config.js");
 var _weatherViewJs = require("./views/weatherView.js");
 var _weatherViewJsDefault = parcelHelpers.interopDefault(_weatherViewJs);
-const controlWeather = async function(station) {
-    // Retrieves weather data from model
-    const weather = await _modelJs.retrieveWeather(station);
-    // Renders weather
-    _weatherViewJsDefault.default.render(_modelJs.stations[station], weather);
+const controlStation = async function(station) {
+    try {
+        // Updates weather given station
+        const weather = await _modelJs.updateWeather(station);
+        _modelJs.state.station = station;
+        _modelJs.state.weather = weather;
+        // Periodically checks if weather data is current
+        //  If not, updates weather
+        //  THERE IS A PACKAGE IN NODE THAT CAN MORE ELEGANTLY HANDLE THIS
+        //    Implement once you know noe
+        //    https://www.npmjs.com/package/set-interval-async
+        async function execute1() {
+            while(true){
+                await new Promise((resolve)=>setTimeout(resolve, 2 * _configJs.MINUTES)
+                );
+                await _modelJs.checkWeather(station);
+            }
+        }
+        execute1();
+        // Renders weather
+        _weatherViewJsDefault.default.render(_modelJs.stations[station], weather);
+    } catch (err) {
+        console.log(err);
+    }
 };
-controlWeather("fbi");
-_modelJs.updateWeather("fbi");
+controlStation("kutx");
 
-},{"./model.js":"Y4A21","./views/weatherView.js":"jcuJR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports) {
+},{"./model.js":"Y4A21","./config.js":"k5Hzs","./views/weatherView.js":"jcuJR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state
 );
 parcelHelpers.export(exports, "stations", ()=>stations
 );
-parcelHelpers.export(exports, "retrieveWeather", ()=>retrieveWeather
-);
 parcelHelpers.export(exports, "updateWeather", ()=>updateWeather
 );
-parcelHelpers.export(exports, "updateWeatherData", ()=>updateWeatherData
+parcelHelpers.export(exports, "checkWeather", ()=>checkWeather
 );
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
@@ -575,40 +592,32 @@ const stations = {
         ]
     }
 };
-const retrieveWeather = async function(station) {
+const updateWeather = async function(station) {
     try {
         const [lat, lng] = stations[station].coordinates;
         const url = `${_configJs.API_WEATHER_URL}lat=${lat}&lon=${lng}&appid=${_configJs.API_WEATHER_KEY}&units=imperial`;
         const data = await fetch(url);
         const weather = await data.json();
-        state.station = station;
-        state.weather = weather;
-        // add an updateState method
-        // const { speed, deg, gust } = wind;
-        // state.weather.wind = { speed, deg, gust };
         return weather;
     } catch (err) {
         console.error(err);
     }
 };
-const updateWeather = function(station) {
-    setInterval(updateWeatherData(state, station), 1 * _configJs.MINUTES);
-};
-const updateWeatherData = async function(state1, station) {
+const checkWeather = async function(station) {
     try {
-        const prev = state1;
-        const cur = await retrieveWeather(station);
+        console.log("Checking weather!");
+        const needsUpdate = false;
+        const prev = state;
         console.log("prev", prev.weather);
+        const cur = await updateWeather(state.station);
         console.log("cur", cur);
-        if (prev != cur) console.log(`Something's fishy!`);
-        else console.log("All good here");
-    // // Update all at once
-    // if (prev.speed !== speed) state.weather.wind.speed = speed;
-    // if (prev.deg !== deg) state.weather.wind.deg = deg;
-    // if (prev.gust !== gust) state.weather.wind.gust = gust;
-    // console.log("Wind data updated!");
+        if (prev.weather.wind.speed !== cur.wind.speed || prev.weather.wind.dir !== cur.wind.dir || prev.weather.main.temp !== cur.main.temp || prev.weather.weather[0].description !== cur.weather[0].description) {
+            console.log("Changing now");
+            needsUpdate = true;
+        } else console.log(`They were same at ${Date.now()}`);
+        return needsUpdate;
     } catch (err) {
-        console.error("Trouble updating error!");
+        console.error(err);
     }
 };
 

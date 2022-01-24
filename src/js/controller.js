@@ -11,6 +11,9 @@ const controlStation = async function (station) {
 
     // Periodically checks if weather data is current
     //  If not, updates weather
+    //  THERE IS A PACKAGE IN NODE THAT CAN MORE ELEGANTLY HANDLE THIS
+    //    Implement once you know noe
+    //    https://www.npmjs.com/package/set-interval-async
     async function execute1() {
       while (true) {
         await new Promise((resolve) => setTimeout(resolve, 2 * MINUTES));
