@@ -1,8 +1,4 @@
 Work on Model
-XX. Add stations to state
-XX. Add event handlers to the click events
-3. On click, play audio
-  -- Return the 
 4. Generate the table in a programmatic way
   -
   -

@@ -2,6 +2,7 @@ import * as model from "./model.js";
 import { MINUTES } from "./config.js";
 import weatherView from "./views/weatherView.js";
 import audioView from "./views/audioView.js";
+import iconView from "./views/iconView.js";
 
 const controlStation = async function (station) {
   try {
@@ -31,16 +32,22 @@ const controlStation = async function (station) {
   }
 };
 
-controlStation("kutx");
+const toggleHidden = function (el) {
+  el.classList.toggle("moving");
+  el.classList.toggle("hidden");
+};
 
 const controlAudio = function (station) {
-  url = model.stations[station].streamingUrl;
-  const audio = new Audio("url");
+  // console.log(station);
+  // console.log(model.stations[station].streamingUrl);
+  // url = model.stations[station].streamingUrl;
+  const audio = new Audio(`${model.stations[station].streamingUrl}`);
   audio.play();
 };
 
 const init = function () {
-  audioView.addHandlerClick(controlAudio);
+  audioView.addHandlerStation(controlAudio);
+  iconView.addHandlerTable(toggleHidden);
 };
 
 init();
