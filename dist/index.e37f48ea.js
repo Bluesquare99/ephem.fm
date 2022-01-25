@@ -524,6 +524,8 @@ var _modelJs = require("./model.js");
 var _configJs = require("./config.js");
 var _weatherViewJs = require("./views/weatherView.js");
 var _weatherViewJsDefault = parcelHelpers.interopDefault(_weatherViewJs);
+var _audioViewJs = require("./views/audioView.js");
+var _audioViewJsDefault = parcelHelpers.interopDefault(_audioViewJs);
 const controlStation = async function(station) {
     try {
         // Updates weather given station
@@ -543,15 +545,24 @@ const controlStation = async function(station) {
             }
         }
         execute1();
-        // Renders weather
-        _weatherViewJsDefault.default.render(_modelJs.stations[station], weather);
+    // Renders weather
+    // weatherView.render(model.stations[station], weather);
     } catch (err) {
         console.log(err);
     }
 };
 controlStation("kutx");
+const controlAudio = function(station) {
+    url = _modelJs.stations[station].streamingUrl;
+    const audio = new Audio("url");
+    audio.play();
+};
+const init = function() {
+    _audioViewJsDefault.default.addHandlerClick(controlAudio);
+};
+init();
 
-},{"./model.js":"Y4A21","./config.js":"k5Hzs","./views/weatherView.js":"jcuJR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports) {
+},{"./model.js":"Y4A21","./config.js":"k5Hzs","./views/weatherView.js":"jcuJR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/audioView.js":"2HQ1H"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state
@@ -573,7 +584,8 @@ const stations = {
         coordinates: [
             -33.5346,
             151.12
-        ]
+        ],
+        streamingUrl: "https://streamer.fbiradio.com/stream"
     },
     kutx: {
         name: "kutx",
@@ -581,7 +593,8 @@ const stations = {
         coordinates: [
             30.1721,
             -97.4402
-        ]
+        ],
+        streamingUrl: "https://kut.streamguys1.com/kutx-web"
     },
     cism: {
         name: "cism",
@@ -589,7 +602,8 @@ const stations = {
         coordinates: [
             45.3023,
             -73.3644
-        ]
+        ],
+        streamingUrl: "https://stream03.ustream.ca/cism128.mp3"
     }
 };
 const updateWeather = async function(station) {
@@ -716,6 +730,25 @@ class View {
 }
 exports.default = View;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire5eb1")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2HQ1H":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class audioView extends _viewJsDefault.default {
+    _parentEl = document.querySelector(".radio-table");
+    addHandlerClick(handler) {
+        this._parentEl.addEventListener("click", function(e) {
+            const btn = e.target.closest("tbody");
+            if (!btn) return;
+            // get station from here and put station name is as input in handle
+            // add streaming urls to model
+            handler();
+        });
+    }
+}
+exports.default = new audioView();
+
+},{"./View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire5eb1")
 
 //# sourceMappingURL=index.e37f48ea.js.map

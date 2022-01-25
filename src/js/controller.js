@@ -1,6 +1,7 @@
 import * as model from "./model.js";
 import { MINUTES } from "./config.js";
 import weatherView from "./views/weatherView.js";
+import audioView from "./views/audioView.js";
 
 const controlStation = async function (station) {
   try {
@@ -24,10 +25,22 @@ const controlStation = async function (station) {
     execute1();
 
     // Renders weather
-    weatherView.render(model.stations[station], weather);
+    // weatherView.render(model.stations[station], weather);
   } catch (err) {
     console.log(err);
   }
 };
 
 controlStation("kutx");
+
+const controlAudio = function (station) {
+  url = model.stations[station].streamingUrl;
+  const audio = new Audio("url");
+  audio.play();
+};
+
+const init = function () {
+  audioView.addHandlerClick(controlAudio);
+};
+
+init();

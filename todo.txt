@@ -1,23 +1,20 @@
-Weather
-XX. Respond to friend on StackOverflow
-XX. Add a note about importing async SetInterval from npm
-
-Domain Name
-1. Check out Neflify--can they help a homie out in securing a domain?
-
-Create a Display
-XX. Create a rudimentary table
-XX. Add styling
-3. Generate the table in a programmatic way
+Work on Model
+XX. Add stations to state
+XX. Add event handlers to the click events
+3. On click, play audio
+  -- Return the 
+4. Generate the table in a programmatic way
   -
   -
   -
   -
-4. Experiment with other typefaces rather than default
-5. Make it look cool when a line is selected!
+5. Experiment with other typefaces rather than default
+6. Make it look cool when a line is selected!
   - Station: bold
   - Show and DJ's --> a wavy, shifting gradient behind them
-6. background-image: linear-gradient(
+  https://www.joshwcomeau.com/react/rainbow-button/
+  https://www.google.com/search?q=css+how+to+create+a+shifting+gradient&oq=css+how+to+create+a+shifting+gradient&aqs=chrome..69i57j69i64.10019j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_ASHuYd-0Jcu5qtsPsaKl8A019
+7. background-image: linear-gradient(
   50deg,
   hsl(131deg 79% 21%) 0%,
   hsl(131deg 77% 22%) 4%,
@@ -42,6 +39,9 @@ XX. Add styling
   hsl(94deg 46% 86%) 91%,
   hsl(91deg 51% 91%) 100%
 );
+
+Domain Name
+1. Secure ephem.fm on Netlify
 
 Catalog and Research Music
 1. Check out the Spotify API --> how can I look up popularity of songs or artists?

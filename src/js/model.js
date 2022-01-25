@@ -8,16 +8,19 @@ export const stations = {
     name: "fbi",
     city: "Sydney, Australia",
     coordinates: [-33.5346, 151.12],
+    streamingUrl: "https://streamer.fbiradio.com/stream",
   },
   kutx: {
     name: "kutx",
     city: "Austin, Texas, United States of America",
     coordinates: [30.1721, -97.4402],
+    streamingUrl: "https://kut.streamguys1.com/kutx-web",
   },
   cism: {
     name: "cism",
     city: "Montreal, Quebec, Canada",
     coordinates: [45.3023, -73.3644],
+    streamingUrl: "https://stream03.ustream.ca/cism128.mp3",
   },
 };
 
