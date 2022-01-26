@@ -21,6 +21,7 @@
     "parcel": "^2.2.1"
   },
   "dependencies": {
+    "chroma": "^0.0.1",
     "chroma-js": "^2.1.2",
     "set-interval-async": "^2.0.3"
   }
