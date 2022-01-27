@@ -26,6 +26,15 @@ body {
   cursor: pointer;
 }
 
+.icon--login {
+  transform: scale(0.75);
+  position: absolute;
+  top: 5px;
+  right: 12px;
+  z-index: 300;
+  cursor: pointer;
+}
+
 .radio-table {
   transition-duration: 0.1s;
   padding-top: 12vh;
